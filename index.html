@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 min-h-screen">
+    <!-- Modal -->
+    <div id="paymentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md">
+            <h2 class="text-xl text-gray-100 mb-4">Add New Payment</h2>
+            <form id="paymentForm" class="space-y-4">
+                <div>
+                    <label class="text-gray-300 block mb-1">Customer Name</label>
+                    <input type="text" name="customer" required class="w-full p-2 rounded bg-gray-700 text-white">
+                </div>
+                <div>
+                    <label class="text-gray-300 block mb-1">Amount ($)</label>
+                    <input type="number" step="0.01" name="amount" required class="w-full p-2 rounded bg-gray-700 text-white">
+                </div>
+                <div>
+                    <label class="text-gray-300 block mb-1">Payment Method</label>
+                    <select name="payment_method" required class="w-full p-2 rounded bg-gray-700 text-white">
+                        <option value="Cash">Cash</option>
+                        <option value="Card">Card</option>
+                        <option value="Online">Online</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-gray-300 block mb-1">Status</label>
+                    <select name="status" class="w-full p-2 rounded bg-gray-700 text-white">
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+                <div class="flex space-x-3">
+                    <button type="submit" class="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Payment</button>
+                    <button type="button" onclick="closeModal()" class="flex-1 bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="p-6">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-100">Payment Management</h1>
+            <button onclick="openModal()" class="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+                New Payment
+            </button>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h3 class="text-gray-400 text-sm mb-2">Total Revenue</h3>
+                <p class="text-gray-100 text-2xl font-semibold" id="totalRevenue">$0.00</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h3 class="text-gray-400 text-sm mb-2">Pending Payments</h3>
+                <p class="text-gray-100 text-2xl font-semibold" id="pendingCount">0</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h3 class="text-gray-400 text-sm mb-2">Completed Payments</h3>
+                <p class="text-gray-100 text-2xl font-semibold" id="completedCount">0</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h3 class="text-gray-400 text-sm mb-2">Failed Transactions</h3>
+                <p class="text-gray-100 text-2xl font-semibold" id="failedCount">0</p>
+            </div>
+        </div>
+
+        <!-- Payment Cards Container -->
+        <div id="paymentCardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Payment cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('paymentModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('paymentModal').classList.add('hidden');
+            document.getElementById('paymentForm').reset();
+        }
+
+        function getStatusColor(status) {
+            switch (status) {
+                case 'completed':
+                    return 'bg-green-500/10 text-green-400';
+                case 'pending':
+                    return 'bg-yellow-500/10 text-yellow-400';
+                case 'failed':
+                    return 'bg-red-500/10 text-red-400';
+                default:
+                    return 'bg-gray-500/10 text-gray-400';
+            }
+        }
+
+        function createPaymentCard(payment) {
+            const div = document.createElement('div');
+            div.className = 'bg-gray-800 p-6 rounded-lg';
+            div.innerHTML = `
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-gray-100 text-lg font-semibold">Payment #${payment.id}</h3>
+                        <p class="text-gray-400 text-sm">Transaction ID: TXN-${payment.id.toString().padStart(6, '0')}</p>
+                    </div>
+                    <select class="px-2 py-1 text-xs font-medium rounded ${getStatusColor(payment.status)}"
+                            onchange="updateStatus(${payment.id}, this.value)">
+                        <option value="pending" ${payment.status === 'pending' ? 'selected' : ''}>Pending</option>
+                        <option value="completed" ${payment.status === 'completed' ? 'selected' : ''}>Completed</option>
+                        <option value="failed" ${payment.status === 'failed' ? 'selected' : ''}>Failed</option>
+                    </select>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center text-gray-300">
+                        <svg class="w-4 h-4 mr-2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <span class="text-sm">Customer: ${payment.customer}</span>
+                    </div>
+                    <div class="flex items-center text-gray-300">
+                        <svg class="w-4 h-4 mr-2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                        <span class="text-sm">Amount: $${parseFloat(payment.amount).toFixed(2)}</span>
+                    </div>
+                    <div class="flex items-center text-gray-300">
+                        <svg class="w-4 h-4 mr-2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="5" width="20" height="14" rx="2"/>
+                            <path d="M2 10h20"/>
+                        </svg>
+                        <span class="text-sm">Payment Method: ${payment.payment_method}</span>
+                    </div>
+                    <div class="flex items-center text-gray-300">
+                        <svg class="w-4 h-4 mr-2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        <span class="text-sm">Date: ${new Date(payment.created_at).toLocaleDateString()}</span>
+                    </div>
+                </div>
+            `;
+            return div;
+        }
+
+        function updatePaymentCards(payments) {
+            const container = document.getElementById('paymentCardsContainer');
+            container.innerHTML = '';
+            payments.forEach(payment => {
+                container.appendChild(createPaymentCard(payment));
+            });
+        }
+
+        function updateStats(payments) {
+            const totalRevenue = payments.reduce((sum, payment) => sum + parseFloat(payment.amount), 0);
+            const pending = payments.filter(p => p.status === 'pending').length;
+            const completed = payments.filter(p => p.status === 'completed').length;
+            const failed = payments.filter(p => p.status === 'failed').length;
+
+            document.getElementById('totalRevenue').textContent = `$${totalRevenue.toFixed(2)}`;
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('failedCount').textContent = failed;
+        }
+
+        function loadPayments() {
+            fetch('/transactions')
+                .then(response => response.json())
+                .then(data => {
+                    updatePaymentCards(data);
+                    updateStats(data);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function updateStatus(id, newStatus) {
+            fetch(`/transactions/update/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    loadPayments();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while updating the status');
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('paymentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                
+                const jsonData = {
+                    customer: formData.get('customer'),
+                    amount: parseFloat(formData.get('amount')),
+                    payment_method: formData.get('payment_method'),
+                    status: formData.get('status')
+                };
+                
+                fetch('/transactions/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(jsonData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                    } else {
+                        closeModal();
+                        loadPayments();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while adding the payment');
+                });
+            });
+
+            loadPayments();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrailBlaze Rentals - Our Fleet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="home.css">
+    <style>
+        /* Fleet page specific styles */
+        .fleet-page {
+            background-color: #121212;
+            color: #fff;
+            padding: 80px 0;
+        }
+        
+        .fleet-title {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 50px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .car-card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+        
+        .car-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .car-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .card-text {
+            color: #aaa;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 15px;
+        }
+        
+        .price {
+            font-size: 1.2rem;
+            color: #d4af37;  /* Gold color */
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+        
+        .specifications {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .spec-item {
+            text-align: center;
+            color: #aaa;
+        }
+        
+        .spec-item i {
+            font-size: 1.2rem;
+            color: #d4af37;
+            margin-bottom: 5px;
+        }
+        
+        .btn-luxury {
+            background-color: #d4af37;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .btn-luxury:hover {
+            background-color: #fff;
+            color: #000;
+        }
+        
+        .back-button {
+            margin-bottom: 30px;
+        }
+        
+        .back-button .btn {
+            display: flex;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            background-color: transparent;
+            color: #d4af37;
+            border: 1px solid #d4af37;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+        
+        .back-button .btn:hover {
+            background-color: #d4af37;
+            color: #000;
+        }
+        
+        .filters {
+            margin-bottom: 40px;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .filters .form-select, .filters .form-control {
+            background-color: #333;
+            border: none;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+        
+        .filters .btn {
+            background-color: #d4af37;
+            color: #000;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="Home.html">
+                    <h2>TrailBlaze Rentals</h2>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="Home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="fleetpage.html">Fleet</a>
+                        </li>
+                       
+                        <li class="nav-item">
+                            <a class="nav-link" href="login.html">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="aboutus.html">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="createanaccount.html">Create an Account</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Fleet Page Content -->
+    <section class="fleet-page">
+     
+            
+            <!-- Filters -->
+            <div class="filters">
+                <div class="row">
+                    <div class="col-md-3">
+                        <select class="form-select">
+                            <option selected>Car Type</option>
+                            <option>Sports Car</option>
+                            <option>Luxury Sedan</option>
+                            <option>SUV</option>
+                            <option>Convertible</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select">
+                            <option selected>Brand</option>
+                            <option>Ferrari</option>
+                            <option>Lamborghini</option>
+                            <option>Rolls-Royce</option>
+                            <option>Bentley</option>
+                            <option>Cadillac</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select">
+                            <option selected>Price Range</option>
+                            <option>Under $350/day</option>
+                            <option>$350 - $500/day</option>
+                            <option>$500 - $750/day</option>
+                            <option>$750+/day</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn w-100">Apply Filters</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Car Cards -->
+            <div class="row">
+                <!-- First row -->
+                <div class="col-md-4">
+                    <div class="car-card">
+                        <img src="images/carousal1.jpg" alt="Ferrari F8 Tributo">
+                        <div class="card-body">
+                            <h5 class="card-title">Ferrari F8 Tributo</h5>
+                            <p class="card-text">A mid-engine sports car delivering exhilarating speed and dynamic handling.</p>
+                            <div class="specifications">
+                                <div class="spec-item">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <p>710 HP</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gauge-high"></i>
+                                    <p>2.9s 0-60</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gas-pump"></i>
+                                    <p>Auto</p>
+                                </div>
+                            </div>
+                            <p class="price">$500/day</p>
+                            <button class="btn btn-luxury">Reserve Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="car-card">
+                        <img src="images/carousal2.jpg" alt="Cadillac ATS">
+                        <div class="card-body">
+                            <h5 class="card-title">Cadillac ATS</h5>
+                            <p class="card-text">A compact luxury sedan offering a blend of style and performance.</p>
+                            <div class="specifications">
+                                <div class="spec-item">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <p>272 HP</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gauge-high"></i>
+                                    <p>5.5s 0-60</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gas-pump"></i>
+                                    <p>Auto</p>
+                                </div>
+                            </div>
+                            <p class="price">$450/day</p>
+                            <button class="btn btn-luxury">Reserve Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="car-card">
+                        <img src="images/carousal3.jpg" alt="Lamborghini Aventador SVJ">
+                        <div class="card-body">
+                            <h5 class="card-title">Lamborghini Aventador SVJ</h5>
+                            <p class="card-text">A high-performance supercar with aggressive styling and exceptional power.</p>
+                            <div class="specifications">
+                                <div class="spec-item">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <p>770 HP</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gauge-high"></i>
+                                    <p>2.8s 0-60</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gas-pump"></i>
+                                    <p>Auto</p>
+                                </div>
+                            </div>
+                            <p class="price">$600/day</p>
+                            <button class="btn btn-luxury">Reserve Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Second row -->
+                <div class="col-md-4">
+                    <div class="car-card">
+                        <img src="images/rollsroyceghostnew.jpeg" alt="Rolls-Royce Ghost">
+                        <div class="card-body">
+                            <h5 class="card-title">Rolls-Royce Ghost</h5>
+                            <p class="card-text">The epitome of luxury and refinement, with a whisper-quiet cabin and effortless power.</p>
+                            <div class="specifications">
+                                <div class="spec-item">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <p>563 HP</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gauge-high"></i>
+                                    <p>4.8s 0-60</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gas-pump"></i>
+                                    <p>Auto</p>
+                                </div>
+                            </div>
+                            <p class="price">$800/day</p>
+                            <button class="btn btn-luxury">Reserve Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="car-card">
+                        <img src="images/bentley.jpg" alt="Bentley Continental GT">
+                        <div class="card-body">
+                            <h5 class="card-title">Bentley Continental GT</h5>
+                            <p class="card-text">A grand touring luxury coupe that offers both performance and unmatched comfort.</p>
+                            <div class="specifications">
+                                <div class="spec-item">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <p>626 HP</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gauge-high"></i>
+                                    <p>3.6s 0-60</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gas-pump"></i>
+                                    <p>Auto</p>
+                                </div>
+                            </div>
+                            <p class="price">$550/day</p>
+                            <button class="btn btn-luxury">Reserve Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="car-card">
+                        <img src="images/Porsche-911-Turbo-S.jpg" alt="Porsche 911 Turbo S">
+                        <div class="card-body">
+                            <h5 class="card-title">Porsche 911 Turbo S</h5>
+                            <p class="card-text">A legendary sports car that delivers everyday usability and mind-blowing performance.</p>
+                            <div class="specifications">
+                                <div class="spec-item">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <p>640 HP</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gauge-high"></i>
+                                    <p>2.6s 0-60</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gas-pump"></i>
+                                    <p>Auto</p>
+                                </div>
+                            </div>
+                            <p class="price">$480/day</p>
+                            <button class="btn btn-luxury">Reserve Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Third row -->
+                <div class="col-md-4">
+                    <div class="car-card">
+                        <img src="images/benz s class.jpg" alt="Mercedes-Benz S-Class">
+                        <div class="card-body">
+                            <h5 class="card-title">Mercedes-Benz S-Class</h5>
+                            <p class="card-text">The benchmark for luxury sedans with cutting-edge technology and supreme comfort.</p>
+                            <div class="specifications">
+                                <div class="spec-item">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <p>496 HP</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gauge-high"></i>
+                                    <p>4.4s 0-60</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gas-pump"></i>
+                                    <p>Auto</p>
+                                </div>
+                            </div>
+                            <p class="price">$400/day</p>
+                            <button class="btn btn-luxury">Reserve Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="car-card">
+                        <img src="images/aston martin.jpg" alt="Aston Martin DB11">
+                        <div class="card-body">
+                            <h5 class="card-title">Aston Martin DB11</h5>
+                            <p class="card-text">An elegant British grand tourer with breathtaking design and powerful performance.</p>
+                            <div class="specifications">
+                                <div class="spec-item">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <p>528 HP</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gauge-high"></i>
+                                    <p>3.9s 0-60</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gas-pump"></i>
+                                    <p>Auto</p>
+                                </div>
+                            </div>
+                            <p class="price">$540/day</p>
+                            <button class="btn btn-luxury">Reserve Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="car-card">
+                        <img src="images/maclaren.jpg" alt="McLaren 720S">
+                        <div class="card-body">
+                            <h5 class="card-title">McLaren 720S</h5>
+                            <p class="card-text">A masterpiece of engineering with jaw-dropping performance and futuristic design.</p>
+                            <div class="specifications">
+                                <div class="spec-item">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <p>710 HP</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gauge-high"></i>
+                                    <p>2.8s 0-60</p>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="fas fa-gas-pump"></i>
+                                    <p>Auto</p>
+                                </div>
+                            </div>
+                            <p class="price">$700/day</p>
+                            <button class="btn btn-luxury">Reserve Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <nav aria-label="Fleet pagination" class="mt-5">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <div class="footer-links">
+                <a href="aboutus.html">About Us</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <p class="mt-4">&copy; 2025 TrailBlaze Rentals. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
